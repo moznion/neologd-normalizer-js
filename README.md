@@ -1,4 +1,4 @@
-neologd-normalizer-js
+neologd-normalizer-js [![Build Status](https://travis-ci.org/moznion/neologd-normalizer-js.svg?branch=master)](https://travis-ci.org/moznion/neologd-normalizer-js)
 ==
 
 A normalizer of neologd for JavaScript.
