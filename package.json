@@ -1,16 +1,16 @@
 {
-  "name": "normalize-neologd",
+  "name": "neologd-normalizer",
   "version": "0.0.1",
   "description": "neologd normalizing script for JavaScript",
   "main": "build/index.js",
   "scripts": {
     "test": "mocha --compilers js:babel-register",
     "clean": "rm build/*",
-    "build": "browserify index.es -o build/index.js -t babelify"
+    "build": "npm run clean && browserify index.es -o build/index.js -t babelify"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/moznion/normalize-neologd-js.git"
+    "url": "git+https://github.com/moznion/neologd-normalizer-js.git"
   },
   "keywords": [
     "regexp",
@@ -34,7 +34,7 @@
   "author": "moznion",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/moznion/normalize-neologd-js/issues"
+    "url": "https://github.com/moznion/neologd-normalizer-js/issues"
   },
-  "homepage": "https://github.com/moznion/normalize-neologd-js"
+  "homepage": "https://github.com/moznion/neologd-normalizer-js"
 }

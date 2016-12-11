@@ -1,8 +1,8 @@
 import assert from "assert";
-import normalizer from "../index";
+import NeologdNormalizer from "../index";
 
-describe("Normalize", function () {
-    let n = new normalizer();
+describe("NeologdNormalize", function () {
+    let n = new NeologdNormalizer();
     it("Should return correct normalized string", function () {
         assert.equal(n.normalize("０１２３４５６７８９"), "0123456789");
         assert.equal(n.normalize("ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ"), "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
