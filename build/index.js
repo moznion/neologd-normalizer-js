@@ -20,7 +20,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var CJK_UNIFIED_IDEOGRAPHS = '\u4E00-\u9FFF';
 var CJK_SYMBOLS_AND_PUNCTUATION = '\u3000-\u303F';
 var HALFWIDTH_AND_FULLWIDTH_FORMS = '\uFF00-\uFFEF';
-var BASIC_LATIN = '\0-\x7F';
+var BASIC_LATIN = '\0-\x1F!-\x7F'; // exclude 'SPACE' (U+0020)
 var HIRAGANA = '\u3040-\u309F';
 var ZENKAKU_KATAKANA = '\u30A0-\u30FF';
 var MULTI_BYTE = '' + CJK_UNIFIED_IDEOGRAPHS + HIRAGANA + ZENKAKU_KATAKANA + CJK_SYMBOLS_AND_PUNCTUATION + HALFWIDTH_AND_FULLWIDTH_FORMS;
@@ -45,9 +45,9 @@ var NeologdNormalizer = function () {
 
             norm = norm.replace(/ +/g, ' ').replace(/^[ ]+(.+?)$/g, "$1").replace(/^(.+?)[ ]+$/g, "$1");
 
-            norm = this._removeBetweenSpaces(MULTI_BYTE, MULTI_BYTE, norm);
-            norm = this._removeBetweenSpaces(BASIC_LATIN, MULTI_BYTE, norm);
-            norm = this._removeBetweenSpaces(MULTI_BYTE, BASIC_LATIN, norm);
+            norm = this._removeSpacesBetweenMultibyteAndMultibyte(norm);
+            norm = this._removeSpacesBetweenLatinAndMultibyte(norm);
+            norm = this._removeSpacesBetweenMultibyteAndLatin(norm);
 
             norm = this._convertSpecialCharToHankaku(norm);
 
@@ -144,16 +144,49 @@ var NeologdNormalizer = function () {
             });
         }
     }, {
+        key: '_removeSpacesBetweenMultibyteAndMultibyte',
+        value: function _removeSpacesBetweenMultibyteAndMultibyte(str) {
+            return this._removeBetweenSpaces(new RegExp('([' + MULTI_BYTE + ']+)[ ]+([' + MULTI_BYTE + ']+)[ ]*', 'g'), str);
+        }
+    }, {
+        key: '_removeSpacesBetweenLatinAndMultibyte',
+        value: function _removeSpacesBetweenLatinAndMultibyte(str) {
+            return this._removeBetweenSpaces(new RegExp('([' + BASIC_LATIN + ']+)[ ]+([' + MULTI_BYTE + ']+)[ ]*', 'g'), str);
+        }
+    }, {
+        key: '_removeSpacesBetweenMultibyteAndLatin',
+        value: function _removeSpacesBetweenMultibyteAndLatin(str) {
+            return this._removeBetweenSpaces(new RegExp('([' + MULTI_BYTE + ']+)[ ]+([' + BASIC_LATIN + ']+)', 'g'), str); // Don't eat trailing spaces
+        }
+    }, {
         key: '_removeBetweenSpaces',
-        value: function _removeBetweenSpaces(headCharClass, tailCharClass, str) {
-            var re = new RegExp('([' + headCharClass + ']+?)[ ]+([' + tailCharClass + ']+?)', 'g');
-
-            var norm = str;
-            while (norm.match(re)) {
-                norm = norm.replace(re, "$1$2");
+        value: function _removeBetweenSpaces(re, str) {
+            var m = re.exec(str);
+            if (m === null) {
+                return str;
             }
 
-            return norm;
+            var norm = '';
+            var firstIndex = m.index;
+            if (firstIndex > 0) {
+                norm = str.substring(0, firstIndex);
+            }
+
+            var lastIndex = void 0;
+
+            while (true) {
+                norm += m[1] + m[2];
+
+                lastIndex = re.lastIndex;
+
+                if ((m = re.exec(str)) === null) {
+                    break;
+                }
+
+                norm += str.substring(lastIndex, m.index);
+            }
+
+            return norm + str.substring(lastIndex, str.length);
         }
     }]);
 
