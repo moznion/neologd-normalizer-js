@@ -30,7 +30,7 @@ var NeologdNormalizer = function () {
         _classCallCheck(this, NeologdNormalizer);
     }
 
-    _createClass(NeologdNormalizer, [{
+    _createClass(NeologdNormalizer, null, [{
         key: 'normalize',
         value: function normalize() {
             var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';

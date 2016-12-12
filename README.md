@@ -14,9 +14,8 @@ Synopsis
 ```js
 import NeologdNormalizer from "neologd-normalizer";
 
-let normalizer = new NeologdNormalizer();
-normalizer.normalize("　　　ＰＲＭＬ　　副　読　本　　　"); // => "PRML副読本"
-normalizer.normalize("南アルプスの　天然水-　Ｓｐａｒｋｉｎｇ*　Ｌｅｍｏｎ+　レモン一絞り"); // => 南アルプスの天然水-Sparking*Lemon+レモン一絞り
+NeologdNormalizer.normalize("　　　ＰＲＭＬ　　副　読　本　　　"); // => "PRML副読本"
+NeologdNormalizer.normalize("南アルプスの　天然水-　Ｓｐａｒｋｉｎｇ*　Ｌｅｍｏｎ+　レモン一絞り"); // => 南アルプスの天然水-Sparking*Lemon+レモン一絞り
 ```
 
 How to build

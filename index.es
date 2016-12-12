@@ -11,7 +11,7 @@ const ZENKAKU_KATAKANA = '\u{30A0}-\u{30FF}';
 const MULTI_BYTE = `${CJK_UNIFIED_IDEOGRAPHS}${HIRAGANA}${ZENKAKU_KATAKANA}${CJK_SYMBOLS_AND_PUNCTUATION}${HALFWIDTH_AND_FULLWIDTH_FORMS}`;
 
 export default class NeologdNormalizer {
-    normalize(str = '') {
+    static normalize(str = '') {
         if (str === '') {
             return str;
         }
@@ -40,7 +40,7 @@ export default class NeologdNormalizer {
         return norm;
     }
 
-    _convertSpecialCharToZenkaku(str) {
+    static _convertSpecialCharToZenkaku(str) {
         return str.replace(
             /[!"#$%&'()*+,-./:;<=>?@[¥\]^_`{|}~｡､･｢｣]/g,
             (c) => {
@@ -87,7 +87,7 @@ export default class NeologdNormalizer {
         );
     }
 
-    _convertSpecialCharToHankaku(str) {
+    static _convertSpecialCharToHankaku(str) {
         return str.replace(
             /[！”＃＄％＆’（）＊＋，－．／：；＜＝＞？＠［￥］＾＿｀｛｜｝〜。、・「」]/g,
             (c) => {
@@ -134,7 +134,7 @@ export default class NeologdNormalizer {
         );
     }
 
-    _removeBetweenSpaces(headCharClass, tailCharClass, str) {
+    static _removeBetweenSpaces(headCharClass, tailCharClass, str) {
         const re = new RegExp(`([${headCharClass}]+?)[ ]+([${tailCharClass}]+?)`, 'g');
 
         let norm = str;
