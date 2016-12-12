@@ -24,5 +24,7 @@ describe("NeologdNormalize", function () {
         assert.equal(NeologdNormalizer.normalize("Coding the Matrix"), "Coding the Matrix");
         assert.equal(NeologdNormalizer.normalize("南アルプスの　天然水　Ｓｐａｒｋｉｎｇ　Ｌｅｍｏｎ　レモン一絞り"), "南アルプスの天然水Sparking Lemonレモン一絞り");
         assert.equal(NeologdNormalizer.normalize("南アルプスの　天然水-　Ｓｐａｒｋｉｎｇ*　Ｌｅｍｏｎ+　レモン一絞り"), "南アルプスの天然水-Sparking*Lemon+レモン一絞り");
+        assert.equal(NeologdNormalizer.normalize("南アルプスの   天然水   Sparking   Lem   on   レモン一絞り"), "南アルプスの天然水Sparking Lem onレモン一絞り");
+        assert.equal(NeologdNormalizer.normalize("アルゴリズム C plus plus"), "アルゴリズムC plus plus");
     });
 });
