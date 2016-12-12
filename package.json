@@ -5,6 +5,7 @@
   "main": "build/index.js",
   "scripts": {
     "test": "mocha --compilers js:babel-register",
+    "lint": "eslint ./index.es",
     "clean": "rm build/*",
     "build": "npm run clean && browserify index.es -o build/index.js -t babelify"
   },

@@ -16,7 +16,7 @@ export default class NeologdNormalizer {
             return str;
         }
 
-        var norm = moji(str).convert('ZE', 'HE')
+        let norm = moji(str).convert('ZE', 'HE')
                             .convert('HK', 'ZK')
                             .convert('ZS', 'HS')
                             .toString()
@@ -135,7 +135,7 @@ export default class NeologdNormalizer {
     }
 
     _removeBetweenSpaces(headCharClass, tailCharClass, str) {
-        let re = new RegExp(`([${headCharClass}]+?)[ ]+([${tailCharClass}]+?)`, 'g');
+        const re = new RegExp(`([${headCharClass}]+?)[ ]+([${tailCharClass}]+?)`, 'g');
 
         let norm = str;
         while (norm.match(re)) {
