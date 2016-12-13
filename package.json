@@ -7,7 +7,7 @@
     "test": "mocha --compilers js:babel-register",
     "lint": "eslint ./index.es",
     "check": "npm test && npm run lint",
-    "clean": "rm build/*",
+    "clean": "rm -f build/*",
     "build": "npm run clean && browserify index.es -o build/index.js -t babelify",
     "prepublish": "npm run build",
     "bench": "browserify ./author/bench.es -o ./author/bench.js -t babelify && node ./author/bench.js"
