@@ -10,7 +10,7 @@ export default class NeologdNormalizer {
     static _zenkakuKatakana = '\u{30A0}-\u{30FF}';
     static _multiByte = `${NeologdNormalizer._cjkUnifiedIdeographs}${NeologdNormalizer._hiragana}${NeologdNormalizer._zenkakuKatakana}${NeologdNormalizer._cjkSymbolsAndPunctuation}${NeologdNormalizer._halfwidthAndFullwidthForms}`;
 
-    static _spacesBetweenRe = new RegExp(`(?:([${NeologdNormalizer._multiByte}]+)[ ]+([${NeologdNormalizer._multiByte}]+)[ ]*)|(?:([${NeologdNormalizer._basicLatin}]+)[ ]+([${NeologdNormalizer._multiByte}]+)[ ]*)|(?:([${NeologdNormalizer._multiByte}]+)[ ]+([${NeologdNormalizer._basicLatin}]+))`, 'g');
+    static _spacesBetweenRe = new RegExp(`([${NeologdNormalizer._multiByte}]+)[ ]+([${NeologdNormalizer._multiByte}]+)[ ]*|([${NeologdNormalizer._basicLatin}]+)[ ]+([${NeologdNormalizer._multiByte}]+)[ ]*|([${NeologdNormalizer._multiByte}]+)[ ]+([${NeologdNormalizer._basicLatin}]+)`, 'g');
 
     static normalize(str = '') {
         if (str === '') {
@@ -29,9 +29,21 @@ export default class NeologdNormalizer {
         norm = this._convertSpecialCharToZenkaku(norm);
 
         norm = norm.replace(/ +/g, ' ')
-                   .replace(/^[ ]+(.+?)$/g, "$1")
-                   .replace(/^(.+?)[ ]+$/g, "$1")
-                   .replace(this._spacesBetweenRe, "$1$2$3$4$5$6");
+                   .replace(/^[ ]+(.+?)$/g, '$1')
+                   .replace(/^(.+?)[ ]+$/g, '$1')
+                   .replace(this._spacesBetweenRe, (_, $1, $2, $3, $4, $5, $6) => {
+                       if ($1 !== undefined && $2 !== undefined) {
+                           return `${$1}${$2}`;
+                       }
+
+                       if ($3 !== undefined && $4 !== undefined) {
+                           return `${$3}${$4}`;
+                       }
+
+                       if ($5 !== undefined && $6 !== undefined) {
+                           return `${$5}${$6}`;
+                       }
+                   });
 
         norm = this._convertSpecialCharToHankaku(norm);
 
