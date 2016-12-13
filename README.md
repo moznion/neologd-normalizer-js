@@ -32,6 +32,26 @@ How to run test
 $ npm test
 ```
 
+Benchmark
+--
+
+### Run benchmark scirpt
+
+```bash
+$ npm run bench
+```
+
+### Result
+
+Benchmark script is [here](/author/bench.es).
+
+```
+$ npm run bench
+Bench x 2,156 ops/sec ±1.16% (86 runs sampled)
+```
+
+(Node: v6.9.2, Machine: MacBook Pro Retina, 15-inch, Early 2013 2.7 GHz Intel Core i7)
+
 License
 --
 
