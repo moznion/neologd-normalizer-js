@@ -1,15 +1,6 @@
 import moji from 'moji';
 
 // ref: https://github.com/neologd/mecab-ipadic-neologd/wiki/Regexp
-
-const CJK_UNIFIED_IDEOGRAPHS = '\u{4E00}-\u{9FFF}';
-const CJK_SYMBOLS_AND_PUNCTUATION = '\u{3000}-\u{303F}';
-const HALFWIDTH_AND_FULLWIDTH_FORMS = '\u{FF00}-\u{FFEF}';
-const BASIC_LATIN = '\u{0000}-\u{001F}\u{0021}-\u{007F}'; // exclude 'SPACE' (U+0020)
-const HIRAGANA = '\u{3040}-\u{309F}';
-const ZENKAKU_KATAKANA = '\u{30A0}-\u{30FF}';
-const MULTI_BYTE = `${CJK_UNIFIED_IDEOGRAPHS}${HIRAGANA}${ZENKAKU_KATAKANA}${CJK_SYMBOLS_AND_PUNCTUATION}${HALFWIDTH_AND_FULLWIDTH_FORMS}`;
-
 export default class NeologdNormalizer {
     static normalize(str = '') {
         if (str === '') {
@@ -134,16 +125,27 @@ export default class NeologdNormalizer {
         );
     }
 
+    static _CJK_UNIFIED_IDEOGRAPHS = '\u{4E00}-\u{9FFF}';
+    static _CJK_SYMBOLS_AND_PUNCTUATION = '\u{3000}-\u{303F}';
+    static _HALFWIDTH_AND_FULLWIDTH_FORMS = '\u{FF00}-\u{FFEF}';
+    static _BASIC_LATIN = '\u{0000}-\u{001F}\u{0021}-\u{007F}'; // exclude 'SPACE' (U+0020)
+    static _HIRAGANA = '\u{3040}-\u{309F}';
+    static _ZENKAKU_KATAKANA = '\u{30A0}-\u{30FF}';
+    static _MULTI_BYTE = `${NeologdNormalizer._CJK_UNIFIED_IDEOGRAPHS}${NeologdNormalizer._HIRAGANA}${NeologdNormalizer._ZENKAKU_KATAKANA}${NeologdNormalizer._CJK_SYMBOLS_AND_PUNCTUATION}${NeologdNormalizer._HALFWIDTH_AND_FULLWIDTH_FORMS}`;
+
+    static _SPACES_BETWEEN_MULTI_BYTE_AND_MULTI_BYTE_RE = new RegExp(`([${NeologdNormalizer._MULTI_BYTE}]+)[ ]+([${NeologdNormalizer._MULTI_BYTE}]+)[ ]*`, 'g');
     static _removeSpacesBetweenMultibyteAndMultibyte(str) {
-        return this._removeBetweenSpaces(new RegExp(`([${MULTI_BYTE}]+)[ ]+([${MULTI_BYTE}]+)[ ]*`, 'g'), str);
+        return this._removeBetweenSpaces(this._SPACES_BETWEEN_MULTI_BYTE_AND_MULTI_BYTE_RE , str);
     }
 
+    static _SPACES_BETWEEN_LATIN_AND_MULTI_BYTE_RE = new RegExp(`([${NeologdNormalizer._BASIC_LATIN}]+)[ ]+([${NeologdNormalizer._MULTI_BYTE}]+)[ ]*`, 'g');
     static _removeSpacesBetweenLatinAndMultibyte(str) {
-        return this._removeBetweenSpaces(new RegExp(`([${BASIC_LATIN}]+)[ ]+([${MULTI_BYTE}]+)[ ]*`, 'g'), str);
+        return this._removeBetweenSpaces(this._SPACES_BETWEEN_LATIN_AND_MULTI_BYTE_RE , str);
     }
 
+    static _SPACES_BETWEEN_MULTI_BYTE_AND_LATIN_RE = new RegExp(`([${NeologdNormalizer._MULTI_BYTE}]+)[ ]+([${NeologdNormalizer._BASIC_LATIN}]+)`, 'g');
     static _removeSpacesBetweenMultibyteAndLatin(str) {
-        return this._removeBetweenSpaces(new RegExp(`([${MULTI_BYTE}]+)[ ]+([${BASIC_LATIN}]+)`, 'g'), str); // Don't eat trailing spaces
+        return this._removeBetweenSpaces(this._SPACES_BETWEEN_MULTI_BYTE_AND_LATIN_RE , str); // Don't eat trailing spaces
     }
 
     static _removeBetweenSpaces(re, str) {
@@ -155,7 +157,7 @@ export default class NeologdNormalizer {
         let norm = '';
         const firstIndex = m.index;
         if (firstIndex > 0) {
-            norm = str.substring(0, firstIndex);
+            norm = str.slice(0, firstIndex);
         }
 
         let lastIndex;
@@ -169,10 +171,10 @@ export default class NeologdNormalizer {
                 break;
             }
 
-            norm += str.substring(lastIndex, m.index);
+            norm += str.slice(lastIndex, m.index);
         }
 
-        return norm + str.substring(lastIndex, str.length);
+        return norm + str.slice(lastIndex);
     }
 }
 
