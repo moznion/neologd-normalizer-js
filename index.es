@@ -151,6 +151,9 @@ export default class NeologdNormalizer {
     }
 
     static _removeBetweenSpaces(re, str) {
+        // init (RegExp has state so there is possibility that it remembers previous lastIndex; thus reset)
+        re.lastIndex = 0;
+
         let m = re.exec(str);
         if (m === null) {
             return str;
