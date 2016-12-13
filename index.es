@@ -19,8 +19,8 @@ export default class NeologdNormalizer {
 
         let norm = moji(str).convert('ZE', 'HE')
                             .convert('HK', 'ZK')
-                            .convert('ZS', 'HS')
                             .toString()
+                            .replace(/[ 　]+/g, ' ')
                             .replace(/[˗֊‐‑‒–⁃⁻₋−]/g, '-')
                             .replace(/[﹣－ｰ—―─━ー]/g, 'ー')
                             .replace(/[~∼∾〜〰～]/g, '')
@@ -28,8 +28,7 @@ export default class NeologdNormalizer {
 
         norm = this._convertSpecialCharToZenkaku(norm);
 
-        norm = norm.replace(/ +/g, ' ')
-                   .replace(/^[ ]?(.+?)[ ]?$/g, '$1')
+        norm = norm.replace(/^[ ]?(.+?)[ ]?$/g, '$1')
                    .replace(this._spacesBetweenRe, (_, $1, $2, $3, $4, $5, $6) => {
                        if ($1 !== undefined && $2 !== undefined) {
                            return `${$1}${$2}`;
