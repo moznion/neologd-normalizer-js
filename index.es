@@ -127,27 +127,27 @@ export default class NeologdNormalizer {
         );
     }
 
-    static _CJK_UNIFIED_IDEOGRAPHS = '\u{4E00}-\u{9FFF}';
-    static _CJK_SYMBOLS_AND_PUNCTUATION = '\u{3000}-\u{303F}';
-    static _HALFWIDTH_AND_FULLWIDTH_FORMS = '\u{FF00}-\u{FFEF}';
-    static _BASIC_LATIN = '\u{0000}-\u{001F}\u{0021}-\u{007F}'; // exclude 'SPACE' (U+0020)
-    static _HIRAGANA = '\u{3040}-\u{309F}';
-    static _ZENKAKU_KATAKANA = '\u{30A0}-\u{30FF}';
-    static _MULTI_BYTE = `${NeologdNormalizer._CJK_UNIFIED_IDEOGRAPHS}${NeologdNormalizer._HIRAGANA}${NeologdNormalizer._ZENKAKU_KATAKANA}${NeologdNormalizer._CJK_SYMBOLS_AND_PUNCTUATION}${NeologdNormalizer._HALFWIDTH_AND_FULLWIDTH_FORMS}`;
+    static _cjkUnifiedIdeographs = '\u{4E00}-\u{9FFF}';
+    static _cjkSymbolsAndPunctuation = '\u{3000}-\u{303F}';
+    static _halfwidthAndFullwidthForms = '\u{FF00}-\u{FFEF}';
+    static _basicLatin = '\u{0000}-\u{001F}\u{0021}-\u{007F}'; // exclude 'SPACE' (U+0020)
+    static _hiragana = '\u{3040}-\u{309F}';
+    static _zenkakuKatakana = '\u{30A0}-\u{30FF}';
+    static _multiByte = `${NeologdNormalizer._cjkUnifiedIdeographs}${NeologdNormalizer._hiragana}${NeologdNormalizer._zenkakuKatakana}${NeologdNormalizer._cjkSymbolsAndPunctuation}${NeologdNormalizer._halfwidthAndFullwidthForms}`;
 
-    static _SPACES_BETWEEN_MULTI_BYTE_AND_MULTI_BYTE_RE = new RegExp(`([${NeologdNormalizer._MULTI_BYTE}]+)[ ]+([${NeologdNormalizer._MULTI_BYTE}]+)[ ]*`, 'g');
+    static _spacesBetweenMultiByteAndMultiByteRe = new RegExp(`([${NeologdNormalizer._multiByte}]+)[ ]+([${NeologdNormalizer._multiByte}]+)[ ]*`, 'g');
     static _removeSpacesBetweenMultibyteAndMultibyte(str) {
-        return this._removeBetweenSpaces(this._SPACES_BETWEEN_MULTI_BYTE_AND_MULTI_BYTE_RE , str);
+        return this._removeBetweenSpaces(this._spacesBetweenMultiByteAndMultiByteRe , str);
     }
 
-    static _SPACES_BETWEEN_LATIN_AND_MULTI_BYTE_RE = new RegExp(`([${NeologdNormalizer._BASIC_LATIN}]+)[ ]+([${NeologdNormalizer._MULTI_BYTE}]+)[ ]*`, 'g');
+    static _spacesBetweenLatinAndMultiByteRe = new RegExp(`([${NeologdNormalizer._basicLatin}]+)[ ]+([${NeologdNormalizer._multiByte}]+)[ ]*`, 'g');
     static _removeSpacesBetweenLatinAndMultibyte(str) {
-        return this._removeBetweenSpaces(this._SPACES_BETWEEN_LATIN_AND_MULTI_BYTE_RE , str);
+        return this._removeBetweenSpaces(this._spacesBetweenLatinAndMultiByteRe , str);
     }
 
-    static _SPACES_BETWEEN_MULTI_BYTE_AND_LATIN_RE = new RegExp(`([${NeologdNormalizer._MULTI_BYTE}]+)[ ]+([${NeologdNormalizer._BASIC_LATIN}]+)`, 'g');
+    static _spacesBetweenMultiByteAndLatinRe = new RegExp(`([${NeologdNormalizer._multiByte}]+)[ ]+([${NeologdNormalizer._basicLatin}]+)`, 'g');
     static _removeSpacesBetweenMultibyteAndLatin(str) {
-        return this._removeBetweenSpaces(this._SPACES_BETWEEN_MULTI_BYTE_AND_LATIN_RE , str); // Don't eat trailing spaces
+        return this._removeBetweenSpaces(this._spacesBetweenMultiByteAndLatinRe , str); // Don't eat trailing spaces
     }
 
     static _removeBetweenSpaces(re, str) {
