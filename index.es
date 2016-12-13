@@ -22,9 +22,8 @@ export default class NeologdNormalizer {
                             .toString()
                             .replace(/[ 　]+/g, ' ')
                             .replace(/[˗֊‐‑‒–⁃⁻₋−]/g, '-')
-                            .replace(/[﹣－ｰ—―─━ー]/g, 'ー')
-                            .replace(/[~∼∾〜〰～]/g, '')
-                            .replace(/ー+/g, 'ー');
+                            .replace(/[﹣－ｰ—―─━ー]+/g, 'ー')
+                            .replace(/[~∼∾〜〰～]/g, '');
 
         norm = this._convertSpecialCharToZenkaku(norm);
 
