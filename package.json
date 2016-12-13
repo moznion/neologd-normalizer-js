@@ -6,8 +6,10 @@
   "scripts": {
     "test": "mocha --compilers js:babel-register",
     "lint": "eslint ./index.es",
+    "check": "npm test && npm run lint",
     "clean": "rm build/*",
-    "build": "npm run clean && browserify index.es -o build/index.js -t babelify"
+    "build": "npm run clean && browserify index.es -o build/index.js -t babelify",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
