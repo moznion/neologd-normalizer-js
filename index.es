@@ -3,14 +3,14 @@ import moji from 'moji';
 // ref: https://github.com/neologd/mecab-ipadic-neologd/wiki/Regexp
 export default class NeologdNormalizer {
     static _cjkUnifiedIdeographs = '\u{4E00}-\u{9FFF}';
-    static _cjkSymbolsAndPunctuation = '\u{3000}-\u{303F}';
+    static _cjkSymbolsAndPunctuation = '\u{3001}-\u{303F}'; // exclude 'IDEOGRAPHIC SPACE' (U+3000)
     static _halfwidthAndFullwidthForms = '\u{FF00}-\u{FFEF}';
     static _basicLatin = '\u{0000}-\u{001F}\u{0021}-\u{007F}'; // exclude 'SPACE' (U+0020)
     static _hiragana = '\u{3040}-\u{309F}';
     static _zenkakuKatakana = '\u{30A0}-\u{30FF}';
     static _multiByte = `${NeologdNormalizer._cjkUnifiedIdeographs}${NeologdNormalizer._hiragana}${NeologdNormalizer._zenkakuKatakana}${NeologdNormalizer._cjkSymbolsAndPunctuation}${NeologdNormalizer._halfwidthAndFullwidthForms}`;
 
-    static _spacesBetweenRe = new RegExp(`([${NeologdNormalizer._multiByte}]+)[ ]+([${NeologdNormalizer._multiByte}]+)[ ]*|([${NeologdNormalizer._basicLatin}]+)[ ]+([${NeologdNormalizer._multiByte}]+)[ ]*|([${NeologdNormalizer._multiByte}]+)[ ]+([${NeologdNormalizer._basicLatin}]+)`, 'g');
+    static _spacesBetweenRe = new RegExp(`([${NeologdNormalizer._multiByte}]+)[ ]+([${NeologdNormalizer._multiByte}]+)[ ]*|([${NeologdNormalizer._basicLatin}]+)[ ]+([${NeologdNormalizer._multiByte}]+)[ ]*|([${NeologdNormalizer._multiByte}]+)[ ]+([${NeologdNormalizer._basicLatin}]+)`, 'gu');
 
     static normalize(str = '') {
         if (str === '') {
@@ -20,14 +20,14 @@ export default class NeologdNormalizer {
         let norm = moji(str).convert('ZE', 'HE')
                             .convert('HK', 'ZK')
                             .toString()
-                            .replace(/[ 　]+/g, ' ')
-                            .replace(/[˗֊‐‑‒–⁃⁻₋−]/g, '-')
-                            .replace(/[﹣－ｰ—―─━ー]+/g, 'ー')
-                            .replace(/[~∼∾〜〰～]/g, '');
+                            .replace(/[\u{3000} ]+/gu, ' ')
+                            .replace(/[˗֊‐‑‒–⁃⁻₋−]/gu, '-')
+                            .replace(/[﹣－ｰ—―─━ー]+/gu, 'ー')
+                            .replace(/[~∼∾〜〰～]/gu, '');
 
         norm = this._convertSpecialCharToZenkaku(norm);
 
-        norm = norm.replace(/^[ ]?(.+?)[ ]?$/g, '$1')
+        norm = norm.replace(/^[ ]?(.+?)[ ]?$/gu, '$1')
                    .replace(this._spacesBetweenRe, (_, $1, $2, $3, $4, $5, $6) => {
                        if ($1 !== undefined && $2 !== undefined) {
                            return `${$1}${$2}`;
@@ -136,7 +136,7 @@ export default class NeologdNormalizer {
     }
     static _convertSpecialCharToHankaku(str) {
         return str.replace(
-            /[！”＃＄％＆’（）＊＋，－．／：；＜＝＞？＠［￥］＾＿｀｛｜｝〜。、・「」]/g,
+            /[！”＃＄％＆’（）＊＋，－．／：；＜＝＞？＠［￥］＾＿｀｛｜｝〜。、・「」]/gu,
             (c) => {
                 return this._specialCharacterZenkakuToHankakuMap[c];
             }
