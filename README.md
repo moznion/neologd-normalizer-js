@@ -47,7 +47,7 @@ Benchmark script is [here](/author/bench.es).
 
 ```
 $ npm run bench
-Bench x 2,723 ops/sec ±0.90% (86 runs sampled)
+Bench x 6,247 ops/sec ±1.03% (85 runs sampled)
 ```
 
 (Node: v6.9.2, Machine: MacBook Pro Retina, 15-inch, Early 2013 2.7 GHz Intel Core i7)

@@ -21,7 +21,6 @@
     "neologd"
   ],
   "dependencies": {
-    "moji": "^0.5.1"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",

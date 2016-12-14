@@ -6,9 +6,9 @@ describe("NeologdNormalize", function () {
         assert.equal(NeologdNormalizer.normalize("０１２３４５６７８９"), "0123456789");
         assert.equal(NeologdNormalizer.normalize("ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ"), "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         assert.equal(NeologdNormalizer.normalize("ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ"), "abcdefghijklmnopqrstuvwxyz");
-        assert.equal(NeologdNormalizer.normalize("！”＃＄％＆’（）＊＋，－．／：；＜＞？＠［￥］＾＿｀｛｜｝"), "!\"#$%&'()*+,-./:;<>?@[¥]^_`{|}");
+        assert.equal(NeologdNormalizer.normalize("！”＃＄％＆’（）＊＋，⁃．／：；＜＞？＠［￥］＾＿｀｛｜｝"), "!\"#$%&'()*+,-./:;<>?@[¥]^_`{|}");
         assert.equal(NeologdNormalizer.normalize("＝。、・「」"), "=｡､･｢｣");
-        assert.equal(NeologdNormalizer.normalize("ﾊﾝｶｸ"), "ハンカク");
+        assert.equal(NeologdNormalizer.normalize("ﾊﾝｶｸｾﾞﾝｶｸ"), "ハンカクゼンカク");
         assert.equal(NeologdNormalizer.normalize("o₋o"), "o-o");
         assert.equal(NeologdNormalizer.normalize("majika━"), "majikaー");
         assert.equal(NeologdNormalizer.normalize("わ〰い"), "わい");
