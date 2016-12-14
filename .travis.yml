@@ -3,6 +3,5 @@ script: npm run check
 node_js:
   - "6"
   - "6.1"
-  - "5.11"
 sudo: false
 
