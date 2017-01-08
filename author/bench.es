@@ -1,5 +1,5 @@
 import Benchmark from "benchmark";
-import NeologdNormalizer from "../index.es";
+import NeologdNormalizer from "../build/index.js";
 
 let suite = new Benchmark.Suite;
 suite.add('Bench', () => {
